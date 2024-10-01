@@ -1,0 +1,11 @@
+[tool.pyright]
+typeCheckingMode = "strict"
+reportUnusedCallResult = false
+venvPath = "."
+venv = ".venv"
+executionEnvironments = [
+      { root = "src" },
+      { root = "tests", extraPaths = [
+            "src",
+      ] },
+]
