@@ -5,18 +5,18 @@ from openai import OpenAI
 from openai.types.chat import ChatCompletionMessageParam
 
 
-class ChatOpts(TypedDict):
+class GptFmtChatOpts(TypedDict):
     model: str
     temperature: NotRequired[int]
     top_p: NotRequired[int | float]
     timeout: NotRequired[int]
 
 
-ChatMessages = Iterable[ChatCompletionMessageParam]
+GptFmtChatMessages = Iterable[ChatCompletionMessageParam]
 
 
-class Chat:
-    def __init__(self, **opts: Unpack[ChatOpts]):
+class GptFmtChat:
+    def __init__(self, **opts: Unpack[GptFmtChatOpts]):
         self.model = opts.get("model")
         self.temperature = opts.get("temperature")
         self.top_p = opts.get("top_p")
@@ -26,7 +26,7 @@ class Chat:
 
     def complete(
         self,
-        messages: ChatMessages,
+        messages: GptFmtChatMessages,
         on_chunk: Callable[[str], None] | None = None,
         on_done: Callable[[str], None] | None = None,
     ):

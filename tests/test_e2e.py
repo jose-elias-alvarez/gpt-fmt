@@ -7,8 +7,8 @@ from dataclasses import dataclass
 from io import StringIO
 from unittest.mock import Mock, patch
 
-from gpt_fmt import main
 from gpt_fmt.args import GptFmtArgs, parse_args
+from gpt_fmt.main import main
 
 
 @dataclass
@@ -81,13 +81,20 @@ class TestE2E(unittest.TestCase):
 
     @patch("sys.exit")
     def test_check(self, mock_exit: Mock):
-        main(self.make_args(["--check"]))
+        main(
+            self.make_args(
+                [
+                    "--quiet",
+                    "--check",
+                ]
+            )
+        )
 
         mock_exit.assert_called_once_with(1)
 
     @patch("sys.exit")
     def test_check_no_change(self, mock_exit: Mock):
-        main(self.make_args(["--check", "--prompt", "do nothing"]))
+        main(self.make_args(["--quiet", "--check", "--prompt", "do nothing"]))
 
         mock_exit.assert_called_once_with(0)
 

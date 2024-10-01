@@ -7,7 +7,7 @@ setup(
     package_dir={"": "src"},
     entry_points={
         "console_scripts": [
-            "gpt-fmt=gpt_fmt:main",
+            "gpt-fmt=gpt_fmt.main:main",
         ],
     },
 )

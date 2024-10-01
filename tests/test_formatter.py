@@ -6,9 +6,9 @@ from dataclasses import dataclass
 from io import StringIO
 from unittest.mock import patch
 
-from gpt_fmt import GptFormatter
 from gpt_fmt.args import parse_args
 from gpt_fmt.config import GptFmtConfig
+from gpt_fmt.formatter import GptFormatter
 
 
 @dataclass
@@ -19,7 +19,7 @@ class Fixtures:
     edited = "print('test')"
 
 
-class TestMain(unittest.TestCase):
+class TestFormatter(unittest.TestCase):
     fixtures = Fixtures()
 
     @contextmanager
@@ -36,7 +36,7 @@ class TestMain(unittest.TestCase):
         return config
 
     def setUp(self):
-        MockChat = patch("gpt_fmt.Chat").start()
+        MockChat = patch("gpt_fmt.formatter.GptFmtChat").start()
         mock_chat = MockChat.return_value
         mock_chat.complete.return_value = self.fixtures.edited
         MockChat.return_value = mock_chat
@@ -54,7 +54,7 @@ class TestMain(unittest.TestCase):
         except FileNotFoundError:
             pass
 
-    def test_main(self):
+    def test_formatter(self):
         formatter = GptFormatter(self.get_config(), self.source)
         edited, did_change = formatter.format()
 
