@@ -175,9 +175,12 @@ For all files: sort imports alphabetically, check spelling and grammar
 ## Development
 
 ```sh
-git clone https://github.com/jose-elias-alvarez/gpt-fmt
+git clone https://github.com/jose-elias-alvarez/gpt-fmt && cd gpt-fmt
+# recommended, but not strictly necessary
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
 # link local project so changes are reflected immediately
-cd gpt-fmt && pip install -e .
+pip install -e .
 ```
 
 The project uses [Basedpyright](https://github.com/DetachHead/basedpyright) for type-checking and linting, but you can get away with vanilla [Pyright](https://github.com/microsoft/pyright). It uses [black](https://github.com/psf/black) for formatting, which is as ironic as you want it to be.
@@ -199,21 +202,21 @@ If you are a very fancy Neovim user, you can use this instead:
 ```lua
 -- :GptFmt prompt goes here
 vim.api.nvim_create_user_command("GptFmt", function(args)
-	local cmd = { "gpt-fmt", "-", "--no-stream", "--stdin-filename", vim.api.nvim_buf_get_name(0) }
-	if args.args then
-		table.insert(cmd, "--prompt")
-		table.insert(cmd, args.args)
-	end
-	local result = vim.system(cmd, {
-		stdin = vim.api.nvim_buf_get_lines(0, 0, -1, false),
-	}):wait()
-	if result.code ~= 0 then
-		vim.api.nvim_err_writeln(string.format("gpt-fmt error: %s", result.stderr))
-	else
-		vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(result.stdout, "\n"))
-	end
+    local cmd = { "gpt-fmt", "-", "--no-stream", "--stdin-filename", vim.api.nvim_buf_get_name(0) }
+    if args.args then
+        table.insert(cmd, "--prompt")
+        table.insert(cmd, args.args)
+    end
+    local result = vim.system(cmd, {
+        stdin = vim.api.nvim_buf_get_lines(0, 0, -1, false),
+    }):wait()
+    if result.code ~= 0 then
+        vim.api.nvim_err_writeln(string.format("gpt-fmt error: %s", result.stderr))
+    else
+        vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(result.stdout, "\n"))
+    end
 end, {
-	nargs = "?",
+    nargs = "?",
 })
 ```
 
