@@ -6,8 +6,7 @@ from gpt_fmt.formatter import GptFormatter
 
 
 def main(args: GptFmtArgs | None = None):
-    if args is None:
-        args = parse_args()
+    args = args or parse_args()
     config = GptFmtConfig(args)
 
     exit_code = 0

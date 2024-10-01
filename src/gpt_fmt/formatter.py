@@ -23,10 +23,10 @@ class GptFormatter:
             model=self.config.model,
         )
         self.start_time = time.perf_counter()
-        self.debug_log(f"Initalizing with config: {config}")
+        self.debug_log(f"Initializing with config: {config}")
 
     def debug_log(self, msg: str):
-        if self.config.debug is False:
+        if not self.config.debug:
             return
         sys.stdout.write(msg + "\n")
 
@@ -54,11 +54,11 @@ class GptFormatter:
         sys.stdout.write(chunk)
 
     def write(self, edited: str):
-        if self.config.debug is True:
+        if self.config.debug:
             with tempfile.NamedTemporaryFile(mode="w", delete=False) as temp:
                 temp.write(edited)
                 self.debug_log(f"Output at {temp.name}")
-        elif self.config.write is True:
+        elif self.config.write:
             with open(self.source, "w") as file:
                 file.write(edited)
         elif not self.config.quiet and not self.config.stream:
@@ -67,33 +67,23 @@ class GptFormatter:
     def read(self):
         if self.source == "-":
             self.debug_log("Reading code from stdin")
-            code = sys.stdin.read()
-        else:
-            self.debug_log(f"Reading code from {self.source}")
-            with open(self.source, "r") as file:
-                code = file.read()
-        return code
+            return sys.stdin.read()
+        self.debug_log(f"Reading code from {self.source}")
+        with open(self.source, "r") as file:
+            return file.read()
 
     @property
     def filename(self):
         if self.source == "-":
-            if self.config.stdin_filename is None:
-                return "unknown (infer from code)"
-            return self.config.stdin_filename
+            return self.config.stdin_filename or "unknown (infer from code)"
         return self.source
 
     def get_edited(self, original: str):
         self.debug_log(f"Getting edited code for prompt: {self.prompt}")
         edited = self.chat.complete(
             [
-                {
-                    "role": "system",
-                    "content": SYSTEM_PROMPT,
-                },
-                {
-                    "role": "system",
-                    "content": EXAMPLE_PROMPT,
-                },
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "system", "content": EXAMPLE_PROMPT},
                 {"role": "user", "content": f"Name: {self.filename}"},
                 {"role": "user", "content": f"Code: {original}"},
                 {"role": "user", "content": f"Prompt: {self.prompt}"},

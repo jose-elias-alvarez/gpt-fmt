@@ -25,11 +25,11 @@ class GptFmtConfig:
 
     def load_rc(self):
         for path in self.rc_paths:
-            try:
-                if path.is_file():
+            if path.is_file():
+                try:
                     return path.read_text()
-            except (FileNotFoundError, PermissionError):
-                continue
+                except (FileNotFoundError, PermissionError):
+                    continue
         return None
 
     @property
@@ -51,5 +51,4 @@ class GptFmtConfig:
         self.check = args.check
         self.debug = args.debug
         self.quiet = args.quiet
-        # rename to avoid conflict w/ getter
-        self.cli_prompt = args.prompt
+        self.cli_prompt = args.prompt  # rename to avoid conflict w/ getter

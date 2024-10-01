@@ -1,17 +1,17 @@
 import argparse
 import sys
-from typing import Sequence
+from typing import List, Optional, Sequence
 
 DEFAULT_MODEL = "gpt-4o-mini"
 DEFAULT_TIMEOUT = 5000
 
 
 class GptFmtArgs(argparse.Namespace):
-    sources: list[str]
-    prompt: str | None
+    sources: List[str]
+    prompt: Optional[str]
     model: str
     timeout: int
-    stdin_filename: str | None
+    stdin_filename: Optional[str]
     write: bool
     diff: bool
     stream: bool

@@ -29,7 +29,7 @@ class GptFmtChat:
         messages: GptFmtChatMessages,
         on_chunk: Callable[[str], None] | None = None,
         on_done: Callable[[str], None] | None = None,
-    ):
+    ) -> str:
         completion = self.client.chat.completions.create(
             model=self.model,
             messages=messages,
@@ -46,8 +46,8 @@ class GptFmtChat:
             if chunk_content is None:
                 break
             content += chunk_content
-            if on_chunk is not None:
+            if on_chunk:
                 on_chunk(chunk_content)
-        if on_done is not None:
+        if on_done:
             on_done(content)
         return content
