@@ -112,8 +112,8 @@ print(f"Area of the rectangle is: {rectangle_area}")
 ## Setup
 
 ```sh
-git clone https://github.com/jose-elias-alvarez/gpt-fmt
-cd gpt-fmt && pip install .
+git clone https://github.com/jose-elias-alvarez/gpt-fmt && cd gpt-fmt
+pip install .
 ```
 
 You'll also need an [OpenAI API key](https://platform.openai.com/api-keys), which should be defined in your shell's environment as `OPENAI_API_KEY`.
